@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { fetchChapterImages } from "@/lib/mangadex";
 import { LoadingScreen } from "@/components/ui";
 import { Home, ChevronLeft, ChevronRight, Settings, ArrowUp } from "lucide-react";
 import styles from "./Read.module.css";
@@ -17,8 +16,13 @@ export default function ReadPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const urls = await fetchChapterImages(chapterId);
-        setImages(urls);
+        const res = await fetch(`/api/read/${chapterId}`);
+        const data = await res.json();
+        if (data.urls) {
+          setImages(data.urls);
+        } else {
+          throw new Error(data.error || "Failed to load pages");
+        }
       } catch (err) {
         console.error("Error loading chapter:", err);
       } finally {
