@@ -26,7 +26,7 @@ export async function GET(req: NextRequest) {
       take: limit,
       orderBy: { createdAt: "desc" },
       select: { id: true, email: true, name: true, role: true, avatar: true, createdAt: true, updatedAt: true },
-    }),
+    }).then(users => users.map(u => ({ ...u, avatar: u.avatar ? `/api/users/${u.id}/avatar` : null }))),
     prisma.user.count({ where }),
   ]);
 

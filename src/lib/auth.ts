@@ -31,7 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           email: user.email,
           name: user.name,
           role: user.role,
-          image: user.avatar,
+          image: user.avatar ? `/api/users/${user.id}/avatar` : null,
         };
       },
     }),

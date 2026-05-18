@@ -17,22 +17,22 @@ export default function ProfilePage() {
     if (!user) return;
     setSaving(true);
     try {
-      let avatarUrl = user.image;
+      const payload: any = { name };
       if (preview) {
         const url = await upload();
-        if (url) avatarUrl = url;
+        if (url) payload.avatar = url;
       }
       const res = await fetch(`/api/users/${user.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, avatar: avatarUrl }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (data.success) {
         if (update) {
           await update({
             name,
-            image: avatarUrl,
+            image: `/api/users/${user.id}/avatar?t=${Date.now()}`,
           });
         }
         addToast("success", "Profile updated!");
