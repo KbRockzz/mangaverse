@@ -1,0 +1,13 @@
+.searchPage { padding: 2rem 0; }
+.searchHeader { margin-bottom: 2rem; }
+.searchHeader h1 { font-size: 1.8rem; }
+.filters {
+  display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;
+}
+.searchBar {
+  position: relative; flex: 1; min-width: 250px;
+}
+.searchBar svg {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);
+}
+.searchBar input { padding-left: 2.5rem; }

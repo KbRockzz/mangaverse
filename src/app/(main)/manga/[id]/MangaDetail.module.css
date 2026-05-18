@@ -1,0 +1,49 @@
+.detailsPage { min-height: 100vh; position: relative; }
+.heroBg {
+  position: absolute; top: 0; left: 0; right: 0; height: 500px;
+  background-size: cover; background-position: center;
+  filter: blur(60px) brightness(0.3); z-index: -1;
+}
+.content { display: grid; grid-template-columns: 300px 1fr; gap: 3rem; padding-top: 4rem; }
+.sidebar { position: sticky; top: 100px; align-self: start; }
+.cover { width: 100%; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); margin-bottom: 1.5rem; }
+.meta {
+  background: var(--bg-secondary); padding: 1.5rem; border-radius: var(--radius-md);
+  border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 1rem;
+}
+.metaItem { display: flex; justify-content: space-between; align-items: center; }
+.metaLabel { color: var(--text-secondary); font-size: 0.9rem; }
+.main { padding-bottom: 5rem; }
+.mangaTitle { font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; line-height: 1.2; }
+.authorInfo { display: flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); margin-bottom: 1.5rem; }
+.tagsContainer { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 2rem; }
+.tagPill {
+  background: var(--bg-tertiary); padding: 4px 12px; border-radius: 20px;
+  font-size: 0.85rem; border: 1px solid var(--border-color); transition: var(--transition);
+}
+.tagPill:hover { border-color: var(--accent-color); color: var(--accent-color); }
+.actions { display: flex; gap: 1rem; margin-bottom: 3rem; }
+.sectionTitle {
+  display: flex; align-items: center; gap: 0.75rem; font-size: 1.25rem;
+  margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--border-color);
+}
+.descSection { margin-bottom: 3rem; }
+.descText { color: var(--text-secondary); line-height: 1.8; white-space: pre-line; }
+.chapterList { display: grid; gap: 0.5rem; max-height: 600px; overflow-y: auto; padding-right: 0.5rem; }
+.chapterItem {
+  background: var(--bg-secondary); padding: 1rem 1.5rem; border-radius: var(--radius-md);
+  display: flex; justify-content: space-between; align-items: center;
+  border: 1px solid var(--border-color); transition: var(--transition);
+}
+.chapterItem:hover { background: var(--bg-tertiary); border-color: var(--accent-color); transform: translateX(5px); }
+.chapterInfo { display: flex; flex-direction: column; }
+.chapterNumber { font-weight: 600; }
+.chapterTitle { font-size: 0.85rem; color: var(--text-secondary); }
+.chapterDate { font-size: 0.85rem; color: var(--text-secondary); }
+
+@media (max-width: 900px) {
+  .content { grid-template-columns: 1fr; }
+  .sidebar { position: static; max-width: 300px; margin: 0 auto; }
+  .mangaTitle { font-size: 2rem; text-align: center; margin-top: 2rem; }
+  .authorInfo, .tagsContainer, .actions { justify-content: center; }
+}

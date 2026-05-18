@@ -1,0 +1,31 @@
+.authPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: radial-gradient(ellipse at top, rgba(255, 103, 64, 0.05), transparent 50%);
+}
+.authCard {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: var(--card-shadow);
+}
+.authHeader {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.authHeader h1 { font-size: 1.8rem; margin: 0.5rem 0 0.25rem; }
+.authHeader p { color: var(--text-secondary); font-size: 0.95rem; }
+.authFooter {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.authFooter a { color: var(--accent-color); font-weight: 600; }
+.authFooter a:hover { text-decoration: underline; }
