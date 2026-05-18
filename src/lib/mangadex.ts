@@ -54,6 +54,11 @@ export const fetchChapterList = async (
   return response.data;
 };
 
+export const fetchChapterDetails = async (chapterId: string) => {
+  const response = await api.get(`/chapter/${chapterId}`);
+  return response.data.data;
+};
+
 export const fetchChapterImages = async (chapterId: string) => {
   const response = await api.get(`/at-home/server/${chapterId}`);
   const { baseUrl, chapter } = response.data;
