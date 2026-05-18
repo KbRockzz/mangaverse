@@ -46,7 +46,7 @@ export default function ReadPage() {
       <div className={styles.readerContent}>
         {images.map((src, i) => (
           <div key={i} className={styles.pageWrapper}>
-            <img src={src} alt={`Page ${i + 1}`} loading={i < 3 ? "eager" : "lazy"} onContextMenu={(e) => e.preventDefault()} />
+            <img src={src} alt={`Page ${i + 1}`} loading={i < 3 ? "eager" : "lazy"} onContextMenu={(e) => e.preventDefault()} referrerPolicy="no-referrer" />
           </div>
         ))}
       </div>

@@ -21,12 +21,14 @@ export default function MangaDetailClient({ title, description, coverUrl, author
 
   return (
     <div className={`${styles.detailsPage} fade-in`}>
-      <div className={styles.heroBg} style={{ backgroundImage: `url(${coverUrl})` }} />
+      <div className={styles.heroBg}>
+        <img src={coverUrl} alt="" referrerPolicy="no-referrer" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      </div>
       <div className="container">
         <div className={styles.content}>
           <div className={styles.sidebar}>
             <div className={styles.cover}>
-              <Image src={coverUrl} alt={title} width={300} height={450} style={{ objectFit: "cover", width: "100%", height: "auto" }} unoptimized priority />
+              <Image src={coverUrl} alt={title} width={300} height={450} style={{ objectFit: "cover", width: "100%", height: "auto" }} unoptimized priority referrerPolicy="no-referrer" />
             </div>
             <div className={styles.meta}>
               <div className={styles.metaItem}>

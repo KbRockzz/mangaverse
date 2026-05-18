@@ -15,7 +15,7 @@ const MangaCard = React.memo(function MangaCard({ id, title, coverUrl, rating, t
   return (
     <Link href={`/manga/${id}`} className={styles.card}>
       <div className={styles.cardImage}>
-        <Image src={coverUrl} alt={title} fill sizes="(max-width: 768px) 50vw, 200px" style={{ objectFit: "cover" }} unoptimized />
+        <Image src={coverUrl} alt={title} fill sizes="(max-width: 768px) 50vw, 200px" style={{ objectFit: "cover" }} unoptimized referrerPolicy="no-referrer" />
         <div className={styles.cardOverlay}>
           {rating && <span className={`badge ${rating === "safe" ? "badge-success" : "badge-warning"}`}>{rating}</span>}
         </div>

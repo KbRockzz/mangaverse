@@ -1,8 +1,8 @@
 .detailsPage { min-height: 100vh; position: relative; }
 .heroBg {
   position: absolute; top: 0; left: 0; right: 0; height: 500px;
-  background-size: cover; background-position: center;
-  filter: blur(60px) brightness(0.3); z-index: -1;
+  overflow: hidden; z-index: -1;
+  filter: blur(60px) brightness(0.3);
 }
 .content { display: grid; grid-template-columns: 300px 1fr; gap: 3rem; padding-top: 4rem; }
 .sidebar { position: sticky; top: 100px; align-self: start; }

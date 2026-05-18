@@ -145,7 +145,7 @@ export default function AdminMangaPage() {
                 {mangas.map((manga) => (
                   <tr key={manga.id}>
                     <td>
-                      {manga.coverImage && <img src={manga.coverImage} alt={manga.title} style={{ width: 40, height: 60, objectFit: "cover", borderRadius: 4 }} />}
+                      {manga.coverImage && <img src={manga.coverImage} alt={manga.title} style={{ width: 40, height: 60, objectFit: "cover", borderRadius: 4 }} referrerPolicy="no-referrer" />}
                     </td>
                     <td style={{ fontWeight: 600, maxWidth: 200 }}>{manga.title}</td>
                     <td style={{ color: "var(--text-secondary)" }}>{manga.author || "—"}</td>
