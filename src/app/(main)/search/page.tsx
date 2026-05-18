@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { searchManga, fetchMangaList } from "@/lib/mangadex";
@@ -9,7 +9,7 @@ import { Pagination } from "@/components/ui";
 import { Search as SearchIcon } from "lucide-react";
 import styles from "./Search.module.css";
 
-export default function SearchPage() {
+function SearchContent() {
   const searchParams = useSearchParams();
   const initialQuery = searchParams.get("q") || "";
   const initialOrder = searchParams.get("order") || "";
@@ -84,3 +84,16 @@ export default function SearchPage() {
     </div>
   );
 }
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={
+      <div className="container" style={{ padding: "4rem 2rem", textAlign: "center" }}>
+        <p style={{ color: "var(--text-secondary)" }}>Loading search...</p>
+      </div>
+    }>
+      <SearchContent />
+    </Suspense>
+  );
+}
+
