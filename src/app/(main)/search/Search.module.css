@@ -1,13 +1,55 @@
-.searchPage { padding: 2rem 0; }
-.searchHeader { margin-bottom: 2rem; }
-.searchHeader h1 { font-size: 1.8rem; }
+.searchPage { padding: 2rem 0; min-height: 80vh; }
+.searchHeader { margin-bottom: 1.5rem; }
+.searchHeader h1 { font-size: 2rem; font-weight: 700; }
 .filters {
   display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;
 }
 .searchBar {
-  position: relative; flex: 1; min-width: 250px;
+  position: relative; flex: 1; min-width: 280px;
 }
 .searchBar svg {
-  position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);
 }
-.searchBar input { padding-left: 2.5rem; }
+.searchBar input { padding-left: 2.75rem; font-size: 0.95rem; }
+
+.tagSection {
+  margin-bottom: 2rem; background: var(--bg-secondary); border-radius: 12px;
+  padding: 1.25rem; border: 1px solid rgba(255, 255, 255, 0.05);
+}
+.tagSectionTitle {
+  font-size: 0.95rem; font-weight: 600; color: var(--text-primary);
+  margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;
+}
+.tagGrid {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+}
+.tagBadge {
+  background: rgba(255, 255, 255, 0.05); color: var(--text-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px;
+  padding: 0.4rem 0.9rem; font-size: 0.8rem; font-weight: 500;
+  cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 0.25rem;
+}
+.tagBadge:hover {
+  background: rgba(255, 255, 255, 0.1); color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+.tagBadgeActive {
+  background: var(--accent-color); color: white !important;
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 4px 12px rgba(255, 74, 96, 0.3);
+}
+
+.clearAllBtn {
+  background: transparent; border: none; color: var(--text-secondary);
+  font-size: 0.8rem; cursor: pointer; transition: var(--transition);
+  text-decoration: underline;
+}
+.clearAllBtn:hover {
+  color: var(--accent-color);
+}
+
+.resultsMeta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 1.5rem; color: var(--text-secondary); font-size: 0.9rem;
+}
+
