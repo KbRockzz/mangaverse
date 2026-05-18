@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   }
 }
 
-// SSR - dynamic rendering
-export const dynamic = "force-dynamic";
+// ISR - revalidate every 30 minutes (1800 seconds)
+export const revalidate = 1800;
 
 export default async function MangaDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
