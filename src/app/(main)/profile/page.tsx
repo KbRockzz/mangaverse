@@ -7,7 +7,7 @@ import { ImageUpload, Spinner } from "@/components/ui";
 import { User, Mail, Shield } from "lucide-react";
 
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, update } = useAuth();
   const addToast = useUIStore((s) => s.addToast);
   const { preview, error: uploadError, selectFile, upload, uploading } = useUpload();
   const [name, setName] = useState(user?.name || "");
@@ -29,6 +29,12 @@ export default function ProfilePage() {
       });
       const data = await res.json();
       if (data.success) {
+        if (update) {
+          await update({
+            name,
+            image: avatarUrl,
+          });
+        }
         addToast("success", "Profile updated!");
       } else {
         addToast("error", data.error || "Update failed");
