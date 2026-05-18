@@ -48,7 +48,9 @@ async function main() {
   for (let i = 4; i <= 10; i++) {
     const manga = await prisma.manga.upsert({
       where: { mangadexId: `sample-${i}` },
-      update: {},
+      update: {
+        createdAt: getDateMonthsAgo(i - 3),
+      },
       create: {
           createdAt: getDateMonthsAgo(i - 3),
         title: `Manga Title ${i}`,
@@ -66,7 +68,9 @@ async function main() {
   // Create sample manga
   const manga1 = await prisma.manga.upsert({
     where: { mangadexId: "sample-1" },
-    update: {},
+    update: {
+      createdAt: getDateMonthsAgo(1),
+    },
     create: {
         createdAt: getDateMonthsAgo(1),
       title: "One Piece",
@@ -81,7 +85,9 @@ async function main() {
 
   const manga2 = await prisma.manga.upsert({
     where: { mangadexId: "sample-2" },
-    update: {},
+    update: {
+      createdAt: getDateMonthsAgo(2),
+    },
     create: {
       createdAt: getDateMonthsAgo(2),
       title: "Naruto",
@@ -96,7 +102,9 @@ async function main() {
 
   const manga3 = await prisma.manga.upsert({
     where: { mangadexId: "sample-3" },
-    update: {},
+    update: {
+      createdAt: getDateMonthsAgo(3),
+    },
     create: {
         createdAt: getDateMonthsAgo(3),
       title: "Attack on Titan",
