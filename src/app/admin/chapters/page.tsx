@@ -108,31 +108,32 @@ export default function AdminChaptersPage() {
 
     setUploading(true);
     try {
-      const newUrls: string[] = [];
+      const base64Urls: string[] = [];
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-        const data = await res.json();
-        if (data.success) {
-          newUrls.push(data.data.url);
-        } else {
-          addToast("error", `Failed to upload: ${data.error}`);
+        
+        // Size validation (5MB max)
+        if (file.size > 5 * 1024 * 1024) {
+          addToast("error", `File ${file.name} is too large. Max 5MB.`);
+          continue;
         }
+
+        const reader = new FileReader();
+        const promise = new Promise<string>((resolve) => {
+          reader.onloadend = () => resolve(reader.result as string);
+        });
+        reader.readAsDataURL(file);
+        const base64 = await promise;
+        base64Urls.push(base64);
       }
 
-      if (newUrls.length > 0) {
-        setPages((prev) => [...prev, ...newUrls]);
-        addToast("success", `Uploaded ${newUrls.length} pages successfully!`);
+      if (base64Urls.length > 0) {
+        setPages((prev) => [...prev, ...base64Urls]);
+        addToast("success", `Added ${base64Urls.length} pages successfully!`);
       }
     } catch (err) {
       console.error(err);
-      addToast("error", "Failed to upload images");
+      addToast("error", "Failed to load images");
     } finally {
       setUploading(false);
     }

@@ -44,22 +44,20 @@ export function useUpload(options: UseUploadOptions = {}) {
   );
 
   const upload = useCallback(async (): Promise<string | null> => {
-    if (!file) return null;
+    if (!preview) return null;
     setUploading(true);
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: formData });
-      const data = await res.json();
-      if (!data.success) throw new Error(data.error);
-      return data.data.url;
+      // Return the base64 string directly.
+      // This stores the user-uploaded image persistently directly in the Supabase PostgreSQL database!
+      // This completely resolves read-only filesystem blocks on serverless platforms like Vercel.
+      return preview;
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
       return null;
     } finally {
       setUploading(false);
     }
-  }, [file]);
+  }, [preview]);
 
   const clear = useCallback(() => {
     setFile(null);
