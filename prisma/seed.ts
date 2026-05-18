@@ -36,6 +36,25 @@ async function main() {
     },
   });
 
+  // Create additional manga entries
+  const mangas = [];
+  for (let i = 4; i <= 10; i++) {
+    const manga = await prisma.manga.upsert({
+      where: { mangadexId: `sample-${i}` },
+      update: {},
+      create: {
+        title: `Manga Title ${i}`,
+        description: `Description for manga ${i}`,
+        author: "Unknown Author",
+        status: "ongoing",
+        tags: JSON.stringify(["Action", "Fantasy"]),
+        mangadexId: `sample-${i}`,
+        viewCount: Math.floor(Math.random() * 5000),
+      },
+    });
+    mangas.push(manga);
+  }
+
   // Create sample manga
   const manga1 = await prisma.manga.upsert({
     where: { mangadexId: "sample-1" },
@@ -80,7 +99,7 @@ async function main() {
   });
 
   // Create sample chapters
-  for (const manga of [manga1, manga2, manga3]) {
+  for (const manga of [manga1, manga2, manga3, ...mangas]) {
     for (let i = 1; i <= 5; i++) {
       await prisma.chapter.upsert({
         where: { mangadexChapterId: `${manga.mangadexId}-ch-${i}` },
@@ -93,6 +112,23 @@ async function main() {
         },
       });
     }
+  }
+
+  // Create bookmarks for demo user
+  for (const manga of [manga1, manga2, manga3]) {
+    await prisma.bookmark.upsert({
+      where: {
+        userId_mangaId: {
+          userId: user.id,
+          mangaId: manga.id,
+        },
+      },
+      update: {},
+      create: {
+        userId: user.id,
+        mangaId: manga.id,
+      },
+    });
   }
 
   console.log("✅ Seed data created successfully");
