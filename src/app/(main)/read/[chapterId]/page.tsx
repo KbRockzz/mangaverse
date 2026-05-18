@@ -3,8 +3,46 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { LoadingScreen } from "@/components/ui";
-import { Home, ChevronLeft, ChevronRight, Eye, EyeOff, ArrowUp, BookOpen } from "lucide-react";
+import { Home, ChevronLeft, ChevronRight, Eye, EyeOff, ArrowUp, BookOpen, RefreshCw } from "lucide-react";
 import styles from "./Read.module.css";
+
+const MangaPageImage = ({ src, index }: { src: string, index: number }) => {
+  const [error, setError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+
+  const handleError = () => {
+    setError(true);
+  };
+
+  const handleRetry = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setError(false);
+    setRetryCount(prev => prev + 1);
+  };
+
+  const imageSrc = retryCount > 0 ? `${src}${src.includes('?') ? '&' : '?'}retry=${retryCount}` : src;
+
+  return (
+    <div className={styles.pageWrapper}>
+      {error ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', background: 'var(--bg-secondary)', color: 'var(--text-secondary)', width: '100%' }}>
+          <p style={{ marginBottom: '1rem' }}>Failed to load page {index + 1}</p>
+          <button onClick={handleRetry} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <RefreshCw size={16} /> Try Again
+          </button>
+        </div>
+      ) : (
+        <img 
+          src={imageSrc} 
+          alt={`Page ${index + 1}`} 
+          loading={index < 3 ? "eager" : "lazy"} 
+          onContextMenu={(e) => e.preventDefault()} 
+          onError={handleError}
+        />
+      )}
+    </div>
+  );
+};
 
 export default function ReadPage() {
   const { chapterId } = useParams<{ chapterId: string }>();
@@ -113,9 +151,7 @@ export default function ReadPage() {
       {/* MANGA PAGES */}
       <div className={styles.readerContent}>
         {images.map((src, i) => (
-          <div key={i} className={styles.pageWrapper}>
-            <img src={src} alt={`Page ${i + 1}`} loading={i < 3 ? "eager" : "lazy"} onContextMenu={(e) => e.preventDefault()} />
-          </div>
+          <MangaPageImage key={i} src={src} index={i} />
         ))}
       </div>
 
