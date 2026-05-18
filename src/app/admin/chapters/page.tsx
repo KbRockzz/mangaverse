@@ -28,7 +28,7 @@ export default function AdminChaptersPage() {
   const [editing, setEditing] = useState<DBChapter | null>(null);
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<ChapterForm>({
-    resolver: zodResolver(chapterSchema),
+    resolver: zodResolver(chapterSchema) as any,
     defaultValues: { number: 1 },
   });
 
@@ -127,7 +127,7 @@ export default function AdminChaptersPage() {
         footer={
           <>
             <button className="btn-secondary" onClick={() => setModalOpen(false)}>Cancel</button>
-            <button className="btn-primary" onClick={handleSubmit((v) => saveMutation.mutate(v))} disabled={saveMutation.isPending}>
+            <button className="btn-primary" onClick={handleSubmit((v) => saveMutation.mutate(v as any))} disabled={saveMutation.isPending}>
               {saveMutation.isPending ? <Spinner size="sm" /> : editing ? "Save" : "Create"}
             </button>
           </>

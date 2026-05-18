@@ -103,7 +103,7 @@ export default function AdminMangaPage() {
       if (url) coverImage = url;
     }
     const tagsArr = values.tags ? values.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
-    saveMutation.mutate({ ...values, tags: JSON.stringify(tagsArr) as unknown as undefined, coverImage } as MangaForm & { coverImage?: string; tags: string });
+    saveMutation.mutate({ ...values, tags: JSON.stringify(tagsArr), coverImage } as any);
   };
 
   const mangas: DBManga[] = data?.data || [];

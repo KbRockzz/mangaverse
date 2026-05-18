@@ -60,7 +60,7 @@ export default function AdminDashboard() {
           <h3>Manga by Status</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-              <Pie data={stats.mangaByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={100} label={({ status, count }) => `${status}: ${count}`}>
+              <Pie data={stats.mangaByStatus} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={100} label={(entry: any) => `${entry.status}: ${entry.count}`}>
                 {stats.mangaByStatus.map((_, i) => (
                   <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
