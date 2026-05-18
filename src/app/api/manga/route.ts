@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
         coverImage: body.coverImage || null,
         author: body.author || null,
         status: body.status || "ongoing",
-        tags: body.tags ? JSON.stringify(body.tags) : null,
+        tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : (body.tags || null),
         mangadexId: body.mangadexId || null,
       },
     });

@@ -30,7 +30,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         coverImage: body.coverImage,
         author: body.author,
         status: body.status,
-        tags: body.tags ? JSON.stringify(body.tags) : undefined,
+        tags: Array.isArray(body.tags) ? JSON.stringify(body.tags) : (body.tags !== undefined ? body.tags : undefined),
       },
     });
     return NextResponse.json({ success: true, data: manga });

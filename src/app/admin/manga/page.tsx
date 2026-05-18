@@ -85,12 +85,23 @@ export default function AdminMangaPage() {
 
   const openEdit = useCallback((manga: DBManga) => {
     setEditing(manga);
+
+    let parsedTags: string[] = [];
+    if (manga.tags) {
+      try {
+        const firstParse = JSON.parse(manga.tags);
+        parsedTags = typeof firstParse === "string" ? JSON.parse(firstParse) : firstParse;
+      } catch (e) {
+        parsedTags = [];
+      }
+    }
+
     reset({
       title: manga.title,
       author: manga.author || "",
       description: manga.description || "",
       status: manga.status as "ongoing" | "completed" | "hiatus",
-      tags: manga.tags ? JSON.parse(manga.tags).join(", ") : "",
+      tags: Array.isArray(parsedTags) ? parsedTags.join(", ") : "",
     });
     clearUpload();
     setModalOpen(true);
@@ -103,7 +114,7 @@ export default function AdminMangaPage() {
       if (url) coverImage = url;
     }
     const tagsArr = values.tags ? values.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
-    saveMutation.mutate({ ...values, tags: JSON.stringify(tagsArr), coverImage } as any);
+    saveMutation.mutate({ ...values, tags: tagsArr, coverImage } as any);
   };
 
   const mangas: DBManga[] = data?.data || [];
