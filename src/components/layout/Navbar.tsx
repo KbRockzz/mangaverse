@@ -2,7 +2,7 @@
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Search, Home, TrendingUp, Clock, BookOpen, Menu, X, User, LogOut, Shield } from "lucide-react";
+import { Search, Home, TrendingUp, Clock, BookOpen, Menu, X, User, LogOut, Shield, Bookmark } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import styles from "./Navbar.module.css";
 
@@ -60,6 +60,9 @@ export default function Navbar() {
                   <Shield size={20} /><span>Admin</span>
                 </Link>
               )}
+              <Link href="/bookmarks" onClick={() => setIsMenuOpen(false)}>
+                <Bookmark size={20} /><span>Bookmarks</span>
+              </Link>
               <Link href="/profile" onClick={() => setIsMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 {user?.image ? (
                   <img
