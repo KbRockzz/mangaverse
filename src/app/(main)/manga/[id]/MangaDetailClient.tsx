@@ -1,7 +1,9 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
-import { User, Info, List as ListIcon, Play } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { useState, useEffect } from "react";
+import { User, Info, List as ListIcon, Play, Bookmark, BookmarkCheck } from "lucide-react";
 import { formatDate } from "@/utils/helpers";
 import styles from "./MangaDetail.module.css";
 
@@ -16,8 +18,60 @@ interface Props {
   tags: string[]; chapters: unknown[];
 }
 
-export default function MangaDetailClient({ title, description, coverUrl, author, status, contentRating, tags, chapters }: Props) {
+export default function MangaDetailClient({ id, title, description, coverUrl, author, status, contentRating, tags, chapters }: Props) {
   const chapterList = chapters as Chapter[];
+  const { data: session } = useSession();
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetch(`/api/bookmarks/check?mangaId=${id}`)
+        .then(res => res.json())
+        .then(data => {
+          setIsBookmarked(data.bookmarked);
+          setIsChecking(false);
+        })
+        .catch(() => setIsChecking(false));
+    } else {
+      setIsChecking(false);
+    }
+  }, [id, session]);
+
+  const toggleBookmark = async () => {
+    if (!session?.user) {
+      alert("Please login to bookmark mangas.");
+      return;
+    }
+
+    const previousState = isBookmarked;
+    setIsBookmarked(!previousState);
+
+    try {
+      const res = await fetch("/api/bookmarks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mangaId: id,
+          title,
+          description,
+          coverUrl,
+          author,
+          tags
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setIsBookmarked(data.bookmarked);
+      } else {
+        setIsBookmarked(previousState);
+        alert(data.message || "Failed to toggle bookmark");
+      }
+    } catch (e) {
+      setIsBookmarked(previousState);
+      alert("Failed to toggle bookmark");
+    }
+  };
 
   return (
     <div className={`${styles.detailsPage} fade-in`}>
@@ -56,6 +110,15 @@ export default function MangaDetailClient({ title, description, coverUrl, author
                   <Play size={18} /> Read First Chapter
                 </Link>
               )}
+              <button 
+                className={`btn-secondary ${isBookmarked ? 'active' : ''}`} 
+                onClick={toggleBookmark}
+                disabled={isChecking}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: isBookmarked ? 'var(--primary-dark)' : 'var(--bg-secondary)', color: 'white', padding: '0.75rem 1.5rem', borderRadius: '4px', border: 'none', cursor: isChecking ? 'not-allowed' : 'pointer' }}
+              >
+                {isBookmarked ? <BookmarkCheck size={18} /> : <Bookmark size={18} />}
+                {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+              </button>
             </div>
 
             <div className={styles.descSection}>
