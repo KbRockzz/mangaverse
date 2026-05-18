@@ -60,8 +60,18 @@ export default function Navbar() {
                   <Shield size={20} /><span>Admin</span>
                 </Link>
               )}
-              <Link href="/profile" onClick={() => setIsMenuOpen(false)}>
-                <User size={20} /><span>{user?.name}</span>
+              <Link href="/profile" onClick={() => setIsMenuOpen(false)} style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                {user?.image ? (
+                  <img
+                    src={user.image}
+                    alt=""
+                    style={{ width: "24px", height: "24px", borderRadius: "50%", objectFit: "cover", border: "1px solid rgba(255, 255, 255, 0.2)" }}
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <User size={20} />
+                )}
+                <span>{user?.name}</span>
               </Link>
               <button onClick={() => { logout(); setIsMenuOpen(false); }} className={styles.logoutBtn}>
                 <LogOut size={20} /><span>Logout</span>
