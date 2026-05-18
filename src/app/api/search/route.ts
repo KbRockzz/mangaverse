@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
+import prisma from "@/lib/prisma";
 
 const BASE_URL = "https://api.mangadex.org";
 
@@ -47,8 +48,45 @@ export async function GET(request: Request) {
     else params["order[relevance]"] = "desc";
 
     const response = await axios.get(`${BASE_URL}/manga`, { params });
+    const mangadexData = response.data;
 
-    return NextResponse.json(response.data);
+    let localMangaList: any[] = [];
+    if (page === 1 && q.trim()) {
+      try {
+        const localMangas = await prisma.manga.findMany({
+          where: {
+            title: {
+              contains: q.trim(),
+              mode: 'insensitive'
+            },
+            mangadexId: null
+          },
+          take: 10
+        });
+
+        localMangaList = localMangas.map(manga => ({
+          id: manga.id,
+          type: "manga",
+          attributes: {
+            title: { en: manga.title },
+            description: { en: manga.description || "" },
+            status: manga.status || "ongoing",
+            contentRating: "safe",
+            tags: manga.tags ? JSON.parse(manga.tags).map((tag: string) => ({ attributes: { name: { en: tag } } })) : [],
+            coverUrl: manga.coverImage
+          },
+          relationships: []
+        }));
+      } catch (err) {
+        console.error("Local search error:", err);
+      }
+    }
+
+    return NextResponse.json({
+      ...mangadexData,
+      data: [...localMangaList, ...mangadexData.data],
+      total: mangadexData.total + localMangaList.length
+    });
   } catch (error: any) {
     console.error("Error inside server-side search API route:", error?.message || error);
     return NextResponse.json(

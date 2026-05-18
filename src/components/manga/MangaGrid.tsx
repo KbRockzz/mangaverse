@@ -19,7 +19,7 @@ export default function MangaGrid({ mangaList, title, loading, icon }: MangaGrid
         const t = manga.attributes.title.en || manga.attributes.title.ja || Object.values(manga.attributes.title)[0] || "Untitled";
         const cover = manga.relationships.find((r) => r.type === "cover_art");
         const fileName = cover?.attributes?.fileName as string | undefined;
-        const coverUrl = getCoverUrl(manga.id, fileName);
+        const coverUrl = (manga.attributes as any).coverUrl || getCoverUrl(manga.id, fileName);
         const tags = manga.attributes.tags?.slice(0, 2).map((tag) => tag.attributes.name.en) || [];
         const rating = manga.attributes.contentRating;
         return { id: manga.id, title: t, coverUrl, tags, rating };
