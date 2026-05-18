@@ -40,6 +40,7 @@ export async function POST(req: NextRequest) {
         title: body.title || null,
         mangaId: body.mangaId,
         mangadexChapterId: body.mangadexChapterId || null,
+        pages: body.pages || [],
       },
     });
     return NextResponse.json({ success: true, data: chapter }, { status: 201 });

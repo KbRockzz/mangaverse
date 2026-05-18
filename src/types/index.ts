@@ -54,6 +54,7 @@ export interface DBChapter {
   title: string | null;
   mangaId: string;
   mangadexChapterId: string | null;
+  pages?: string[];
   createdAt: Date;
   manga?: DBManga;
 }

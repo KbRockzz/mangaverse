@@ -12,7 +12,11 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
     const body = await req.json();
     const chapter = await prisma.chapter.update({
       where: { id },
-      data: { number: body.number, title: body.title },
+      data: { 
+        number: body.number, 
+        title: body.title,
+        pages: body.pages || undefined,
+      },
     });
     return NextResponse.json({ success: true, data: chapter });
   } catch {

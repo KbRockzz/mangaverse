@@ -42,6 +42,7 @@ model Chapter {
   mangaId           String
   manga             Manga    @relation(fields: [mangaId], references: [id], onDelete: Cascade)
   mangadexChapterId String?  @unique
+  pages             String[] @default([])
   createdAt         DateTime @default(now())
 }
 
