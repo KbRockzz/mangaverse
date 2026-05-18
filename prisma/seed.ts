@@ -4,6 +4,13 @@ import bcrypt from "bcryptjs";
 const prisma = new PrismaClient();
 
 async function main() {
+  // Helper to get a date X months ago (roughly 30 days per month)
+  const getDateMonthsAgo = (months: number) => {
+    const now = new Date();
+    // subtract months * 30 days
+    now.setMonth(now.getMonth() - months);
+    return now;
+  };
   // Create admin user
   const adminPassword = await bcrypt.hash("Admin123!", 12);
   const admin = await prisma.user.upsert({
@@ -43,6 +50,7 @@ async function main() {
       where: { mangadexId: `sample-${i}` },
       update: {},
       create: {
+          createdAt: getDateMonthsAgo(i - 3),
         title: `Manga Title ${i}`,
         description: `Description for manga ${i}`,
         author: "Unknown Author",
@@ -60,6 +68,7 @@ async function main() {
     where: { mangadexId: "sample-1" },
     update: {},
     create: {
+        createdAt: getDateMonthsAgo(1),
       title: "One Piece",
       description: "A boy named Monkey D. Luffy sets out on a journey to find the legendary treasure One Piece and become the King of Pirates.",
       author: "Eiichiro Oda",
@@ -74,6 +83,7 @@ async function main() {
     where: { mangadexId: "sample-2" },
     update: {},
     create: {
+      createdAt: getDateMonthsAgo(2),
       title: "Naruto",
       description: "Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage.",
       author: "Masashi Kishimoto",
@@ -88,6 +98,7 @@ async function main() {
     where: { mangadexId: "sample-3" },
     update: {},
     create: {
+        createdAt: getDateMonthsAgo(3),
       title: "Attack on Titan",
       description: "In a world where humanity lives inside cities surrounded by enormous walls, a young boy vows to reclaim the world from the Titans.",
       author: "Hajime Isayama",
