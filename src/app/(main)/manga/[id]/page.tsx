@@ -68,14 +68,23 @@ export default async function MangaDetailPage({ params }: { params: Promise<{ id
       contentRating = "safe";
       tags = localManga.tags ? JSON.parse(localManga.tags) : [];
       
-      chapters = (localManga.chapters || []).map((ch: any) => ({
-        id: ch.id,
-        attributes: {
-          chapter: `${ch.number}`,
-          title: ch.title,
-          createdAt: ch.createdAt.toISOString()
+      if (localManga.mangadexId) {
+        try {
+          const chaptersData = await fetchChapterList(localManga.mangadexId);
+          chapters = chaptersData.data || [];
+        } catch (error) {
+          console.error("Error fetching chapters from MangaDex for local manga:", error);
         }
-      }));
+      } else {
+        chapters = (localManga.chapters || []).map((ch: any) => ({
+          id: ch.id,
+          attributes: {
+            chapter: `${ch.number}`,
+            title: ch.title,
+            createdAt: ch.createdAt.toISOString()
+          }
+        }));
+      }
       found = true;
     }
   } catch (error) {
