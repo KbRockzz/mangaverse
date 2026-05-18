@@ -46,7 +46,7 @@ export const fetchChapterList = async (
     params: {
       limit,
       offset,
-      "translatedLanguage[]": ["en"],
+      "translatedLanguage[]": ["en", "vi"],
       "order[chapter]": "desc",
       "includes[]": ["scanlation_group"],
     },

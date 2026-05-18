@@ -9,7 +9,7 @@ import styles from "./MangaDetail.module.css";
 
 interface Chapter {
   id: string;
-  attributes: { chapter: string | null; title: string | null; createdAt: string };
+  attributes: { chapter: string | null; title: string | null; createdAt: string; translatedLanguage?: string };
 }
 
 interface Props {
@@ -132,7 +132,14 @@ export default function MangaDetailClient({ id, title, description, coverUrl, au
                 {chapterList.map((chapter) => (
                   <Link key={chapter.id} href={`/read/${chapter.id}`} className={styles.chapterItem}>
                     <div className={styles.chapterInfo}>
-                      <span className={styles.chapterNumber}>Chapter {chapter.attributes.chapter || "?"}</span>
+                      <span className={styles.chapterNumber}>
+                        {chapter.attributes.translatedLanguage && (
+                          <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.4rem', background: 'var(--primary)', color: 'white', borderRadius: '4px', marginRight: '0.5rem', textTransform: 'uppercase' }}>
+                            {chapter.attributes.translatedLanguage}
+                          </span>
+                        )}
+                        Chapter {chapter.attributes.chapter || "?"}
+                      </span>
                       <span className={styles.chapterTitle}>{chapter.attributes.title || "No Title"}</span>
                     </div>
                     <div className={styles.chapterDate}>{formatDate(chapter.attributes.createdAt)}</div>
