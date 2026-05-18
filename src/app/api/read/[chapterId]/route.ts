@@ -73,6 +73,7 @@ export async function GET(
       mangaId = mangaRel ? mangaRel.id : null;
       currentChapterNumber = parseFloat(details.attributes.chapter) || 0;
       currentChapterTitle = details.attributes.title || `Chapter ${details.attributes.chapter}`;
+      const chapterLang = details.attributes.translatedLanguage || "en";
 
       if (mangaId) {
         try {
@@ -86,6 +87,7 @@ export async function GET(
 
           const seenChapters = new Set<string>();
           chaptersList = feedData
+            .filter((c: any) => c.attributes.translatedLanguage === chapterLang)
             .map((c: any) => ({
               id: c.id,
               number: parseFloat(c.attributes.chapter) || 0,

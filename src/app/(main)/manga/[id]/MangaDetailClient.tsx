@@ -24,6 +24,17 @@ export default function MangaDetailClient({ id, title, description, coverUrl, au
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
 
+  const availableLanguages = Array.from(new Set(chapterList.map(ch => ch.attributes.translatedLanguage || "en")));
+  const [activeLang, setActiveLang] = useState<string>(availableLanguages[0] || "en");
+
+  useEffect(() => {
+    if (!availableLanguages.includes(activeLang) && availableLanguages.length > 0) {
+      setActiveLang(availableLanguages[0]);
+    }
+  }, [availableLanguages, activeLang]);
+
+  const filteredChapters = chapterList.filter(ch => (ch.attributes.translatedLanguage || "en") === activeLang);
+
   useEffect(() => {
     if (session?.user) {
       fetch(`/api/bookmarks/check?mangaId=${id}`)
@@ -105,8 +116,8 @@ export default function MangaDetailClient({ id, title, description, coverUrl, au
             </div>
 
             <div className={styles.actions}>
-              {chapterList.length > 0 && (
-                <Link href={`/read/${chapterList[chapterList.length - 1].id}`} className="btn-primary">
+              {filteredChapters.length > 0 && (
+                <Link href={`/read/${filteredChapters[filteredChapters.length - 1].id}`} className="btn-primary">
                   <Play size={18} /> Read First Chapter
                 </Link>
               )}
@@ -127,9 +138,34 @@ export default function MangaDetailClient({ id, title, description, coverUrl, au
             </div>
 
             <div className={styles.chaptersSection}>
-              <h2 className={styles.sectionTitle}><ListIcon size={20} /> Chapters ({chapterList.length})</h2>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                <h2 className={styles.sectionTitle} style={{ marginBottom: 0 }}><ListIcon size={20} /> Chapters ({filteredChapters.length})</h2>
+                {availableLanguages.length > 1 && (
+                  <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    {availableLanguages.map(lang => (
+                      <button
+                        key={lang}
+                        onClick={() => setActiveLang(lang)}
+                        style={{
+                          padding: '0.4rem 0.8rem',
+                          background: activeLang === lang ? 'var(--primary)' : 'var(--bg-secondary)',
+                          color: 'white',
+                          border: 'none',
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          textTransform: 'uppercase',
+                          fontWeight: 'bold',
+                          fontSize: '0.85rem'
+                        }}
+                      >
+                        {lang}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
               <div className={styles.chapterList}>
-                {chapterList.map((chapter) => (
+                {filteredChapters.map((chapter) => (
                   <Link key={chapter.id} href={`/read/${chapter.id}`} className={styles.chapterItem}>
                     <div className={styles.chapterInfo}>
                       <span className={styles.chapterNumber}>
