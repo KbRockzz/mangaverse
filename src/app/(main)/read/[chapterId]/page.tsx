@@ -6,29 +6,56 @@ import { LoadingScreen } from "@/components/ui";
 import { Home, ChevronLeft, ChevronRight, Eye, EyeOff, ArrowUp, BookOpen, RefreshCw } from "lucide-react";
 import styles from "./Read.module.css";
 
-const MangaPageImage = ({ src, index }: { src: string, index: number }) => {
+const MangaPageImage = ({ src, index, chapterId }: { src: string, index: number, chapterId: string }) => {
   const [error, setError] = useState(false);
   const [retryCount, setRetryCount] = useState(0);
+  const [currentSrc, setCurrentSrc] = useState(src);
+  const [isRetrying, setIsRetrying] = useState(false);
 
   const handleError = () => {
     setError(true);
   };
 
-  const handleRetry = (e: React.MouseEvent) => {
+  const handleRetry = async (e: React.MouseEvent) => {
     e.stopPropagation();
+    setIsRetrying(true);
+    
+    try {
+      // Fetch a new node from our API
+      const res = await fetch(`/api/read/node/${chapterId}`);
+      const data = await res.json();
+      
+      if (data.baseUrl) {
+        // Extract the /data/hash/file part from the current URL
+        const parts = currentSrc.split('/data/');
+        if (parts.length === 2) {
+          const newSrc = `${data.baseUrl}/data/${parts[1]}`;
+          setCurrentSrc(newSrc);
+          setError(false);
+          setIsRetrying(false);
+          return;
+        }
+      }
+    } catch (err) {
+      console.error("Failed to get new node:", err);
+    }
+    
+    // Fallback if API fails or parsing fails
     setError(false);
     setRetryCount(prev => prev + 1);
+    setIsRetrying(false);
   };
 
-  const imageSrc = retryCount > 0 ? `${src}${src.includes('?') ? '&' : '?'}retry=${retryCount}` : src;
+  // Add retry cache buster as fallback
+  const imageSrc = retryCount > 0 ? `${currentSrc}${currentSrc.includes('?') ? '&' : '?'}retry=${retryCount}` : currentSrc;
 
   return (
     <div className={styles.pageWrapper}>
       {error ? (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '50vh', background: 'var(--bg-secondary)', color: 'var(--text-secondary)', width: '100%' }}>
           <p style={{ marginBottom: '1rem' }}>Failed to load page {index + 1}</p>
-          <button onClick={handleRetry} className="btn-secondary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <RefreshCw size={16} /> Try Again
+          <button onClick={handleRetry} className="btn-secondary" disabled={isRetrying} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', opacity: isRetrying ? 0.7 : 1 }}>
+            <RefreshCw size={16} className={isRetrying ? "spin" : ""} /> {isRetrying ? "Fetching new node..." : "Try Again"}
           </button>
         </div>
       ) : (
@@ -151,7 +178,7 @@ export default function ReadPage() {
       {/* MANGA PAGES */}
       <div className={styles.readerContent}>
         {images.map((src, i) => (
-          <MangaPageImage key={i} src={src} index={i} />
+          <MangaPageImage key={i} src={src} index={i} chapterId={chapterId} />
         ))}
       </div>
 
