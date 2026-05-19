@@ -12,13 +12,31 @@ interface MangaCardProps {
 }
 
 const MangaCard = React.memo(function MangaCard({ id, title, coverUrl, rating, tags }: MangaCardProps) {
+  const getRatingClass = (r?: string) => {
+    if (!r) return "";
+    switch (r.toLowerCase()) {
+      case "safe":
+        return styles.ratingSafe;
+      case "suggestive":
+        return styles.ratingSuggestive;
+      case "erotica":
+      case "pornographic":
+        return styles.ratingErotica;
+      default:
+        return "";
+    }
+  };
+
   return (
     <Link href={`/manga/${id}`} className={styles.card}>
       <div className={styles.cardImage}>
         <Image src={coverUrl} alt={title} fill sizes="(max-width: 768px) 50vw, 200px" style={{ objectFit: "cover" }} unoptimized referrerPolicy="no-referrer" />
-        <div className={styles.cardOverlay}>
-          {rating && <span className={`badge ${rating === "safe" ? "badge-success" : "badge-warning"}`}>{rating}</span>}
-        </div>
+        {rating && (
+          <span className={`${styles.ratingBadge} ${getRatingClass(rating)}`}>
+            {rating}
+          </span>
+        )}
+        <div className={styles.cardOverlay} />
       </div>
       <div className={styles.cardInfo}>
         <h3 className={styles.cardTitle}>{title}</h3>
